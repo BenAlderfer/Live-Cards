@@ -21,7 +21,9 @@
         app:zxing_viewfinder_laser="@color/zxing_custom_viewfinder_laser"
         app:zxing_viewfinder_mask="@color/zxing_custom_viewfinder_mask"/>
 
+    <!-- hack to hide the text -->
     <TextView
+        android:visibility="invisible"
         android:id="@+id/zxing_status_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

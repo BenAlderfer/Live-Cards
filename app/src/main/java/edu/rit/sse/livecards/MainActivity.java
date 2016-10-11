@@ -1,6 +1,7 @@
 package edu.rit.sse.livecards;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -8,10 +9,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.ResultPoint;
@@ -26,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private DecoratedBarcodeView barcodeView;
+
+    private String scannedText;
+
+    private final Context context = this;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -68,6 +76,30 @@ public class MainActivity extends AppCompatActivity {
 
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
+
+        //watch this TextView (invisible) for the results of the scanner (updated automatically)
+        ((TextView) findViewById(R.id.zxing_status_view)).addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if(s.length() != 0) {
+                    //save the newly scanned text
+                    scannedText = s.toString();
+                }
+
+                //Toast the text to make sure
+                Toast.makeText(context, scannedText, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
