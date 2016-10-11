@@ -52,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
         if (permissionCheck == PackageManager.PERMISSION_DENIED) {
             //if the Android version requires prompts (M+) and
             //they have not previously denied access
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ){
+                    //SHOULD also check if the permission should be checked again but it didn't work for me
+                    //maybe since I've run it a couple times on my phone
+                    //&& shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.CAMERA},
                         PERMISSION_REQUEST_CAMERA_CODE);
