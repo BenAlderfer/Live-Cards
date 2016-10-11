@@ -1,6 +1,10 @@
 package edu.rit.sse.livecards;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -24,9 +28,6 @@ public class MainActivity extends AppCompatActivity {
             if (result.getText() != null) {
                 barcodeView.setStatusText(result.getText());
             }
-            //Added preview of scanned barcode
-            ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
-            imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
         }
 
         @Override
@@ -39,6 +40,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA);
+
+        //if it doesn't have the camera permission, prompt for it
+        if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+            //if the Android version requires prompts (M+) and
+            //they have not previously denied access
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                    shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+
+            }
+        }
 
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
@@ -56,14 +70,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         barcodeView.pause();
-    }
-
-    public void pause(View view) {
-        barcodeView.pause();
-    }
-
-    public void resume(View view) {
-        barcodeView.resume();
     }
 
     public void triggerScan(View view) {
